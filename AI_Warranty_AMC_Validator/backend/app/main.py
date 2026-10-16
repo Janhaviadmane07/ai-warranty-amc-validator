@@ -6,6 +6,11 @@ from app.api.endpoints import api_router
 
 # Initialize tables
 Base.metadata.create_all(bind=engine)
+try:
+    from app.services.seed_data import seed_database
+    seed_database()
+except Exception:
+    pass
 
 app = FastAPI(
     title=settings.PROJECT_NAME,

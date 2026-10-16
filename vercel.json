@@ -1,0 +1,14 @@
+{
+  "buildCommand": "cd AI_Warranty_AMC_Validator/frontend && npm install && npm run build",
+  "outputDirectory": "AI_Warranty_AMC_Validator/frontend/dist",
+  "rewrites": [
+    {
+      "source": "/api/v1/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
