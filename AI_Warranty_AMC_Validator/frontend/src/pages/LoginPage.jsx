@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ShieldCheck, ArrowRight, Lock } from 'lucide-react';
+import { api } from '../services/api';
 
 export default function LoginPage({ onLoginSuccess }) {
   const [email, setEmail] = useState('admin@warrantyiq.com');
@@ -13,23 +14,17 @@ export default function LoginPage({ onLoginSuccess }) {
     setError('');
 
     try {
-      const res = await fetch('/api/v1/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
 
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.detail || 'Authentication failed');
-      }
-
-      const data = await res.json();
+      const data = await api.login(email, password);
       localStorage.setItem('warrantyiq_token', data.access_token);
       localStorage.setItem('warrantyiq_user', JSON.stringify(data.user));
       onLoginSuccess(data.user);
     } catch (err) {
-      setError(err.message || 'Login request failed');
+      const msg = err.response?.data?.detail 
+        || (err.message?.includes('HTML') || err.message?.includes('JSON')
+            ? 'Backend server is not reachable. Please ensure your backend is deployed and VITE_API_URL is configured.'
+            : (err.message || 'Login request failed'));
+      setError(msg);
     } finally {
       setLoading(false);
     }
