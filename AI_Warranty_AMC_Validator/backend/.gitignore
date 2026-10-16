@@ -1,0 +1,27 @@
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+.env*
+
+# Flask instance folder
+instance/
+
+# Uploads
+uploads/*
+
+# SQLite DB files
+*.sqlite3
+*.db
+
+# VS Code settings
+.vscode/
+
+# Node modules (frontend)
+frontend/node_modules/
+frontend/dist/
+
+# macOS files
+.DS_Store

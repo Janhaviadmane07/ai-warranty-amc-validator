@@ -1,0 +1,53 @@
+========================================================
+WARRANTYIQ RUN INSTRUCTIONS
+========================================================
+
+OPTION 1: ONE-CLICK / SINGLE COMMAND (RECOMMENDED)
+--------------------------------------------------------
+In your terminal, navigate to the project directory and run:
+
+  cd "c:\Users\janha\Downloads\AI_Warranty_AMC_Validator\AI_Warranty_AMC_Validator"
+  .\start.bat
+
+(Or if using PowerShell: .\start.ps1)
+
+This automatically launches both Backend (FastAPI port 8000) and Frontend (Vite port 5173) in their own dedicated windows.
+
+
+OPTION 2: RUN MANUALLY IN TWO SEPARATE TERMINAL TABS
+--------------------------------------------------------
+
+Terminal 1 (Backend - FastAPI):
+  cd "c:\Users\janha\Downloads\AI_Warranty_AMC_Validator\AI_Warranty_AMC_Validator\backend"
+  python -m app.services.seed_data
+  python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+
+Terminal 2 (Frontend - React/Vite):
+  cd "c:\Users\janha\Downloads\AI_Warranty_AMC_Validator\AI_Warranty_AMC_Validator\frontend"
+  npm install
+  npm run dev
+
+
+DEMO LOGIN CREDENTIALS (3 DISTINCT ROLES)
+--------------------------------------------------------
+URL: http://localhost:5173
+
+1. ADMIN ROLE (Executive Governance & Monitoring)
+   Email:    admin@warrantyiq.com
+   Password: Admin@123
+   Features: Full system access, User/Manager Management, Validation rules,
+             Task Assignments, Performance telemetry, System audit trail.
+
+2. MANAGER ROLE (Contract Manager / Auditor)
+   Email:    manager@warrantyiq.com
+   Password: Manager@123
+   Features: Manager Command Center, Review Cases Queue (Approve/Reject/Clarify),
+             Assigned Users Portfolio Inspection, Recommendations/Suggestions,
+             Contract & AMC renewals.
+
+3. USER ROLE (Departmental Hardware Owner)
+   Email:    user@warrantyiq.com
+   Password: User@123
+   Features: My Assets & Warranties, Upload Documents/Invoices, My Review Cases,
+             Direct messaging with Assigned Manager, Clarification responses,
+             Expiring warranties notification.
