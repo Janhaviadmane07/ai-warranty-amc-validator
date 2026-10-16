@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: warranty-iq-backend
+    env: python
+    plan: free
+    buildCommand: "cd AI_Warranty_AMC_Validator/backend && pip install -r requirements.txt && python -m app.services.seed_data"
+    startCommand: "cd AI_Warranty_AMC_Validator/backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: SECRET_KEY
+        generateValue: true
