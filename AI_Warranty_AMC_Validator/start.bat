@@ -13,10 +13,15 @@ if exist "%SCRIPT_DIR%backend" (
     set BASE_DIR=%SCRIPT_DIR%
 )
 
-start "WarrantyIQ Backend (FastAPI)" cmd /k "cd /d "%BASE_DIR%\backend" && python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload"
-start "WarrantyIQ Frontend (Vite)" cmd /k "cd /d "%BASE_DIR%\frontend" && npm.cmd run dev"
+:: Kill any existing process on ports 8000 and 5173 to prevent conflicts
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr :8000') do taskkill /f /pid %%a 2>nul
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr :5173') do taskkill /f /pid %%a 2>nul
+
+start "WarrantyIQ Backend (FastAPI :8000)" cmd /k "title WarrantyIQ Backend (FastAPI :8000) && cd /d "%BASE_DIR%\backend" && python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload"
+start "WarrantyIQ Frontend (Vite :5173)" cmd /k "title WarrantyIQ Frontend (Vite :5173) && cd /d "%BASE_DIR%\frontend" && npm.cmd run dev"
 
 echo Backend starting on  http://127.0.0.1:8000
+echo API Docs at          http://127.0.0.1:8000/docs
 echo Frontend starting on http://localhost:5173
 echo.
 echo Demo Credentials:
