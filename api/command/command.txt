@@ -1,0 +1,42 @@
+========================================================
+WARRANTYIQ RUN COMMANDS
+========================================================
+
+OPTION 1: AUTOMATIC LAUNCHER (PowerShell or CMD)
+------------------------------------------------
+From your terminal in c:\Users\janha\Downloads\AI_Warranty_AMC_Validator:
+
+   .\start.ps1
+   (or: .\start.bat)
+
+This launches both Backend (FastAPI on http://127.0.0.1:8000)
+and Frontend (Vite on http://localhost:5173) in dedicated windows
+and automatically opens the browser!
+
+
+OPTION 2: RUN IN TWO SEPARATE TERMINAL TABS
+------------------------------------------------
+Terminal 1 (Backend):
+   cd "c:\Users\janha\Downloads\AI_Warranty_AMC_Validator\AI_Warranty_AMC_Validator\backend"
+   python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+
+Terminal 2 (Frontend):
+   cd "c:\Users\janha\Downloads\AI_Warranty_AMC_Validator\AI_Warranty_AMC_Validator\frontend"
+   npm run dev
+
+
+DEMO LOGIN CREDENTIALS
+------------------------------------------------
+URL: http://localhost:5173
+
+1. Admin:
+   Email:    admin@warrantyiq.com
+   Password: Admin@123
+
+2. Contract Manager:
+   Email:    manager@warrantyiq.com
+   Password: Manager@123
+
+3. User:
+   Email:    user@warrantyiq.com
+   Password: User@123

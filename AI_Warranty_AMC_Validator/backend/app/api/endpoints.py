@@ -410,7 +410,7 @@ def get_asset_detail(asset_id: int, db: Session = Depends(get_db), current_user:
     }
 
 @api_router.post("/assets", response_model=AssetResponse)
-def create_asset(payload: AssetCreate, db: Session = Depends(get_db), current_user: User = Depends(require_user)):
+def create_asset(payload: AssetCreate, db: Session = Depends(get_db), current_user: User = Depends(require_manager_or_admin)):
     existing_id = db.query(Asset).filter(Asset.asset_id == payload.asset_id).first()
     if existing_id:
         raise HTTPException(status_code=400, detail=f"Asset ID '{payload.asset_id}' already exists")
@@ -1383,7 +1383,11 @@ def get_manager_performance(period: Optional[str] = Query("all"),
     active_managers = len([m for m in managers if m.is_active])
     return {
         "kpis": {
-            "total_managers": total_managers, "active_managers": active_managers,
+            "total_managers": total_managers,
+            "active_managers": active_managers,
+            "documents_uploaded": sum(m["documents_uploaded"] for m in manager_rows),
+            "tasks_completed": sum(m["tasks_completed"] for m in manager_rows),
+            "tasks_outstanding": sum(m["tasks_outstanding"] for m in manager_rows),
             "total_cases_pending": db.query(ReviewCase).filter(ReviewCase.status == "Submitted for Review").count(),
             "total_cases_in_review": db.query(ReviewCase).filter(ReviewCase.status == "Under Manager Review").count(),
             "total_cases_completed": db.query(ReviewCase).filter(ReviewCase.status.in_(["Completed", "Approved"])).count(),
@@ -1521,8 +1525,21 @@ def create_task(payload: TaskCreate, db: Session = Depends(get_db), current_user
 
     log_audit(db, current_user, "TASK_CREATE", "TASK", str(task.id),
               {"task_identifier": task.task_identifier, "assigned_to": assigned_user.email})
-    return {"id": task.id, "task_identifier": task.task_identifier, "title": task.title,
-            "status": task.status, "priority": task.priority, "assigned_to_name": assigned_user.full_name}
+    return {
+        "id": task.id,
+        "task_identifier": task.task_identifier,
+        "title": task.title,
+        "task_type": task.task_type,
+        "status": task.status,
+        "priority": task.priority,
+        "assigned_to_id": task.assigned_to_id,
+        "assigned_to_name": assigned_user.full_name,
+        "assigned_to_email": assigned_user.email,
+        "created_by_id": task.created_by_id,
+        "due_date": task.due_date,
+        "notes": task.notes,
+        "created_at": task.created_at,
+    }
 
 @api_router.patch("/tasks/{task_id}/status")
 def update_task_status(task_id: int, payload: TaskUpdateStatus, db: Session = Depends(get_db),
@@ -1548,7 +1565,14 @@ def update_task_status(task_id: int, payload: TaskUpdateStatus, db: Session = De
 
     log_audit(db, current_user, "TASK_STATUS_UPDATE", "TASK", str(task.id),
               {"task_identifier": task.task_identifier, "previous_status": prev_status, "new_status": task.status})
-    return {"message": "Task status updated", "task_id": task.id, "status": task.status}
+    return {
+        "message": "Task status updated",
+        "task_id": task.id,
+        "status": task.status,
+        "resolution_notes": task.resolution_notes,
+        "completed_at": task.completed_at.isoformat() if task.completed_at else None,
+        "updated_at": task.updated_at.isoformat() if task.updated_at else None,
+    }
 
 @api_router.get("/admin/tasks/monitoring")
 def get_tasks_monitoring(db: Session = Depends(get_db), admin: User = Depends(require_admin)):

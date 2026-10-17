@@ -4,28 +4,24 @@ WARRANTYIQ RUN INSTRUCTIONS
 
 OPTION 1: ONE-CLICK / SINGLE COMMAND (RECOMMENDED)
 --------------------------------------------------------
-In your terminal, navigate to the project directory and run:
+In your terminal at repository root:
 
-  cd "c:\Users\janha\Downloads\AI_Warranty_AMC_Validator\AI_Warranty_AMC_Validator"
-  .\start.bat
+   .\start.ps1
+   (or if using CMD: .\start.bat)
 
-(Or if using PowerShell: .\start.ps1)
-
-This automatically launches both Backend (FastAPI port 8000) and Frontend (Vite port 5173) in their own dedicated windows.
+This automatically launches both Backend (FastAPI port 8000) and Frontend (Vite port 5173) in their own dedicated windows and opens the browser.
 
 
 OPTION 2: RUN MANUALLY IN TWO SEPARATE TERMINAL TABS
 --------------------------------------------------------
 
 Terminal 1 (Backend - FastAPI):
-  cd "c:\Users\janha\Downloads\AI_Warranty_AMC_Validator\AI_Warranty_AMC_Validator\backend"
-  python -m app.services.seed_data
-  python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+   cd "c:\Users\janha\Downloads\AI_Warranty_AMC_Validator\AI_Warranty_AMC_Validator\backend"
+   python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 
 Terminal 2 (Frontend - React/Vite):
-  cd "c:\Users\janha\Downloads\AI_Warranty_AMC_Validator\AI_Warranty_AMC_Validator\frontend"
-  npm install
-  npm run dev
+   cd "c:\Users\janha\Downloads\AI_Warranty_AMC_Validator\AI_Warranty_AMC_Validator\frontend"
+   npm run dev
 
 
 DEMO LOGIN CREDENTIALS (3 DISTINCT ROLES)
